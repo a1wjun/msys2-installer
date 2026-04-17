@@ -147,6 +147,14 @@ jobs:
         with:
           name: installer-x86_64
 
+      # https://github.com/actions/runner-images/issues/13729
+      - name: Docker issue workaround
+        run: |
+          $dockerState = Get-Service -Name "docker"
+          if ($dockerState.Status -ne "Running") {
+            Start-Service -Name "docker"
+          }
+
       - name: Build image
         run: |
           docker build -t msys2-base -f ./.ci/Dockerfile.${{ matrix.image }} .
