@@ -50,6 +50,8 @@ jobs:
 
       - name: setup-msys2
         uses: msys2/setup-msys2@e9898307ac31d1a803454791be09ab9973336e1c # v2.31.1
+        env:
+          __SETUP_MSYS2_USE_MAIN_MIRROR_ONLY: 'true'
         with:
           msystem: ${{ matrix.msystem }}
           update: true
@@ -58,19 +60,6 @@ jobs:
           pacboy: >-
             qt-installer-framework:p
             7zip:p
-
-      - name: Switch to the main mirror
-        shell: msys2 {0}
-        run: |
-          echo 'Server = https://repo.msys2.org/mingw/$repo/' > /etc/pacman.d/mirrorlist.mingw
-          echo 'Server = https://repo.msys2.org/msys/$arch/' > /etc/pacman.d/mirrorlist.msys
-          pacman-conf.exe
-
-      - name: Update using the main mirror & Check install
-        run: |
-          msys2 -c 'pacman --noconfirm -Suuy'
-          msys2 -c 'pacman --noconfirm -Suu'
-          msys2 -c 'pacman -Qkq'
 
       - name: Build Installer
         shell: msys2 {0}
@@ -91,7 +80,7 @@ jobs:
           mv checksums.tmp msys2-${{ matrix.arch_name }}-checksums.txt
 
       - name: Upload Results
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: installer-${{ matrix.arch_name }}
           path: msys2-*
