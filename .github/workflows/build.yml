@@ -239,4 +239,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          export DO_NOT_TRACK=true
           gh release upload nightly-x86_64 msys2-* --clobber -R ${{ github.repository }}

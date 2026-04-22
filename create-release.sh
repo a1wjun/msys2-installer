@@ -2,6 +2,8 @@
 
 set -e
 
+export DO_NOT_TRACK=true
+
 repo="msys2/msys2-installer"
 source_release="nightly-x86_64"
 tag="$(date -I)"
